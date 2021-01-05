@@ -19,16 +19,14 @@ public class GameMain {
     */
    public GameMain() {
 	   // Create the grid
-	   
-	   // TODO: Create a new instance of the "Grid"class
-	   
+	   grid = new Grid();
 	   // Reset the game variables to their defaults
-	   
-	   // TODO: Assign the default values for currentPlayer (Player.X), gameOver (false), and winner (null)
-
+	   gameOver = false;
+	   currentPlayer = Player.X;
+	   winner = null;
 	   // Begin playing the game
-	   
-	   // TODO: Call the "play()" method
+	   play();
+	
    }
    
    /**
@@ -45,10 +43,16 @@ public class GameMain {
 	        	 if(winner == Player.X) {
 		        	 System.out.println("Player X wins!");
 		         }
+	        	 else if (winner == Player.O)
+	        	 {
+	        		 System.out.println("Player O wins!");
+	        	 }
+	        	 else if (grid.isDraw() == true)
+	        	 {
+	        		 System.out.println("It's a Draw!!");
+	        	 }
 	        	 
-	        	 // TODO: Display result if player O wins
 	        	 
-	        	 // TODO: Display result if it was a draw
 	         }
 	         
 	         // Switch turn to the next player
@@ -72,15 +76,17 @@ public class GameMain {
     	  
     	  // Display instructions to the player
          if (turnPlayer == Player.X) {
-            System.out.print("Player 'X', enter your move (row[1-3] column[1-3]): ");
+            System.out.print("Player 'X', enter your move:");
          } else {
             
-        	 // TODO: Inform Player 'O' to enter their move
+        	 System.out.print("Player 'O', enter your move: ");
         	 
          }
          
          // Obtains input from the player for both row and column
+         System.out.print("\n"+ "Row 1-3:");
          int row = scanner.nextInt();
+         System.out.print("Col 1-3:");
          int col = scanner.nextInt();
          
          // Decrease the value entered by 1 to compensate for the array index starting at 0
@@ -88,14 +94,14 @@ public class GameMain {
          col--;
          
          // Verify the values the player entered are valid (position is valid and empty)
-         if (row >= 0 && row < Grid.ROWS && col >= 0 && col < Grid.COLUMNS && grid.board[row][col].content == Player.EMPTY) {
+         if (row >= 0 && row < grid.ROWS && col >= 0 && col < grid.COLUMNS && grid.board[row][col].content == Player.EMPTY) {
         	 grid.board[row][col].content = turnPlayer;
         	 grid.currentRow = row;
         	 grid.currentCol = col;
         	 validInput = true;
          } else {
         	 
-        	 // TODO: Display an error message that the move was not valid.
+        	 System.out.println("Invalid Move Please Try Again!!");
          }
          
       } while (!validInput);   // Repeat until input is valid
@@ -105,25 +111,33 @@ public class GameMain {
     * Checks if the game has ended
     */
    public void checkForWinner(Player turnPlayer) {
-      if (grid.hasWon(turnPlayer)) {
-    	  
-    	  // TODO: Set gameOver and winner appropriately
-
-      } else if (grid.isDraw()) {
-
-    	  // TODO: Set gameOver and winner appropriately
-      }
+	   if(grid.hasWon(turnPlayer)) {
+			gameOver = true;
+			winner=currentPlayer;
+			System.out.println("Congratulations " + winner + ". You Have Won!");
+			
+		} else if(grid.isDraw()) {
+			gameOver = true;
+			System.out.println("The game is a draw.");
+		}
    }
  
    /**
     * The main() method
     */
    public static void main(String[] args) {
-	   
-	   // TODO: Add a loop to restart the game once it has finished
-	   
-	   // TODO: Then update the loop to ask the player if they want to play again, exit if they do not
-	   
-	   new GameMain();
+	   char playAgain;
+	   while (true) {
+			new GameMain();
+			System.out.println("Play again? Press Y to play again or N to exit");
+			playAgain = scanner.next().charAt(0);
+			if (playAgain == 'y') {
+				continue;
+			}
+			else if (playAgain == 'n') {
+				System.out.println("Thank You For Playing.");
+				System.exit(0);
+				break;
+			}
 	}
-}
+}}
